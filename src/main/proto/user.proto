@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "io.linkfast.demogrpc.grpc.user";
+option java_package = "io.linkfast.demogrpc.user";
 option java_outer_classname = "UserGrpcProto";
 
 package user;
@@ -14,12 +14,12 @@ service UserService {
 }
 
 message UserRq {
-    string name = 2;
-    string nickName = 3;
-    string address = 4;
-    int32 age = 5;
-    bool active = 6;
-    string sex = 7;
+    string name = 1;
+    string nickName = 2;
+    string address = 3;
+    int32 age = 4;
+    bool active = 5;
+    string sex = 6;
 }
 
 message UserRs {

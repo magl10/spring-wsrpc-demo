@@ -1,11 +1,8 @@
 package io.linkfast.demogrpc.wsrpc.base.proto;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-import io.linkfast.demogrpc.grpc.user.DeleteUserRq;
-import io.linkfast.demogrpc.grpc.user.DeleteUserRs;
+import io.linkfast.demogrpc.user.DeleteUserRq;
+import io.linkfast.demogrpc.user.DeleteUserRs;
 
-import javax.websocket.OnMessage;
-import javax.websocket.Session;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;

@@ -1,6 +1,6 @@
 package io.linkfast.demogrpc.wsrpc.base.proto;
 
-import io.linkfast.demogrpc.grpc.user.ListUsersResponse;
+import io.linkfast.demogrpc.user.ListUsersResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

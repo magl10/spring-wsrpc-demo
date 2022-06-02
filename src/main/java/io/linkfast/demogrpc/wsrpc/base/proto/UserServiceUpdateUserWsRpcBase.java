@@ -1,7 +1,7 @@
 package io.linkfast.demogrpc.wsrpc.base.proto;
 
-import io.linkfast.demogrpc.grpc.user.UserRs;
-import io.linkfast.demogrpc.grpc.user.UserUpdateRq;
+import io.linkfast.demogrpc.user.UserRs;
+import io.linkfast.demogrpc.user.UserUpdateRq;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

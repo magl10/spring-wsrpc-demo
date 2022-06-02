@@ -2,7 +2,7 @@ package io.linkfast.demogrpc.wsrpc;
 
 import io.linkfast.demogrpc.arangodb.entity.User;
 import io.linkfast.demogrpc.arangodb.repository.UserRepository;
-import io.linkfast.demogrpc.grpc.user.*;
+import io.linkfast.demogrpc.user.*;
 import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceCreateUserWsRpcBase;
 import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceDeleteUserWsRpcBase;
 import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceGetAllUserWsRpcBase;

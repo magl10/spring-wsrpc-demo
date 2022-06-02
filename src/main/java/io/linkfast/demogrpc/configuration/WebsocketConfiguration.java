@@ -22,6 +22,7 @@ public class WebsocketConfiguration implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
                 .addHandler(this.userService.createUser(), "/UserService/CreateUser")
+                .addHandler(this.userService.getAllUsers(), "/UserService")
                 .setAllowedOrigins("*");
     }
 }
