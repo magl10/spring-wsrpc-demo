@@ -1,18 +1,15 @@
 package io.linkfast.demogrpc.wsrpc.base.proto;
 
-import io.linkfast.demogrpc.user.DeleteUserRq;
-import io.linkfast.demogrpc.user.DeleteUserRs;
+import io.linkfast.demogrpc.user.ListUsersResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public abstract class UserServiceDeleteUserWsRpcBase extends SpringWsRpcHandler {
+public abstract class UserServiceGetAllUserWsRpcBaseUnary extends UnarySpringWsRpcHandler {
 
     ByteBuffer process(ByteBuffer requestByteBuffer) throws IOException {
-        DeleteUserRq request;
-        request = DeleteUserRq.parseFrom(requestByteBuffer);
-        final var response = deleteUser(request);
+        final var response = getAllUser();
         final var responseOutputStream = new ByteArrayOutputStream();
         response.writeTo(responseOutputStream);
         responseOutputStream.close();
@@ -20,6 +17,5 @@ public abstract class UserServiceDeleteUserWsRpcBase extends SpringWsRpcHandler 
         return ByteBuffer.wrap(responseOutputStream.toByteArray());
     }
 
-    protected abstract DeleteUserRs deleteUser(DeleteUserRq request);
-
+    protected abstract ListUsersResponse getAllUser();
 }

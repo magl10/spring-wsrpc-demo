@@ -1,12 +1,13 @@
 package io.linkfast.demogrpc.wsrpc;
 
+import io.linkfast.demogrpc.arangodb.entity.Driver;
+import io.linkfast.demogrpc.arangodb.entity.Position;
 import io.linkfast.demogrpc.arangodb.entity.User;
+import io.linkfast.demogrpc.arangodb.repository.DriverRepository;
+import io.linkfast.demogrpc.arangodb.repository.PositionRepository;
 import io.linkfast.demogrpc.arangodb.repository.UserRepository;
 import io.linkfast.demogrpc.user.*;
-import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceCreateUserWsRpcBase;
-import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceDeleteUserWsRpcBase;
-import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceGetAllUserWsRpcBase;
-import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceUpdateUserWsRpcBase;
+import io.linkfast.demogrpc.wsrpc.base.proto.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,17 +18,26 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DriverRepository driverRepository;
+    private final PositionRepository positionRepository;
 
     public UserService(
-            UserRepository userRepository
+            UserRepository userRepository,
+            DriverRepository driverRepository,
+            PositionRepository positionRepository
     ) {
         this.userRepository = userRepository;
+        this.driverRepository = driverRepository;
+        this.positionRepository = positionRepository;
     }
 
-    public UserServiceCreateUserWsRpcBase createUser() {
-        return new UserServiceCreateUserWsRpcBase() {
+    public UserServiceCreateUserWsRpcBaseUnary createUser() {
+
+        return new UserServiceCreateUserWsRpcBaseUnary() {
+
             @Override
             protected UserRs createUser(UserRq request) {
+
                 User user = User.builder()
                         .name(request.getName())
                         .nickName(request.getNickName())
@@ -49,11 +59,12 @@ public class UserService {
                         .setSex(user.getSex())
                         .build();
             }
+
         };
     }
 
-    public UserServiceDeleteUserWsRpcBase deleteUser() {
-        return new UserServiceDeleteUserWsRpcBase() {
+    public UserServiceDeleteUserWsRpcBaseUnary deleteUser() {
+        return new UserServiceDeleteUserWsRpcBaseUnary() {
             @Override
             protected DeleteUserRs deleteUser(DeleteUserRq request) {
                 Optional<User> userOptional = userRepository.findById(request.getId());
@@ -72,8 +83,8 @@ public class UserService {
         };
     }
 
-    public UserServiceGetAllUserWsRpcBase getAllUsers() {
-        return new UserServiceGetAllUserWsRpcBase() {
+    public UserServiceGetAllUserWsRpcBaseUnary getAllUsers() {
+        return new UserServiceGetAllUserWsRpcBaseUnary() {
             @Override
             protected ListUsersResponse getAllUser() {
                 List<User> listUsers = userRepository.findAll();
@@ -94,8 +105,8 @@ public class UserService {
         };
     }
 
-    public UserServiceUpdateUserWsRpcBase updateUser() {
-        return new UserServiceUpdateUserWsRpcBase() {
+    public UserServiceUpdateUserWsRpcBaseUnary updateUser() {
+        return new UserServiceUpdateUserWsRpcBaseUnary() {
             @Override
             protected UserRs updateUser(UserUpdateRq request) {
                 Optional<User> userOptional = userRepository.findById(request.getId());
@@ -123,6 +134,82 @@ public class UserService {
                 } else {
                     throw new RuntimeException("User not found.");
                 }
+            }
+        };
+    }
+
+    public UserServiceOnReceivedLocationDriverWsRpc onReceivedLocationDriver() {
+        return new UserServiceOnReceivedLocationDriverWsRpc() {
+            @Override
+            protected void onReceivedLocationDriver(
+                    GetPositionDriverRq request,
+                    WsRpcStreamObserver<PositionRs> responseObserver
+            ) {
+                Optional<Driver> optionalDriver = driverRepository.findById(request.getIdDriver());
+
+                double lat = 0.0;
+                double lng = 0.0;
+
+                if (optionalDriver.isPresent()) {
+
+                    String positionId = "";
+
+                    Optional<Position> optionalPositionFirst = Optional.ofNullable(optionalDriver.get().getPosition());
+                    if (optionalPositionFirst.isPresent()) {
+                        positionId = optionalPositionFirst.get().getId();
+                    } else {
+                        responseObserver.onNext(
+                                PositionRs.newBuilder()
+                                        .setLatitude(lat)
+                                        .setLongitude(lng)
+                                        .build()
+                        );
+                        responseObserver.onCompleted();
+                    }
+
+
+                    Boolean listen = true;
+
+                    while (listen) {
+                        Optional<Position> optionalPosition = positionRepository.findById(positionId);
+                        if (optionalPosition.isPresent()) {
+
+                            Position position = optionalPosition.get();
+                            listen = position.getListen();
+                            if (position.getListen()) {
+                                if (position.getLatitude() != lat || position.getLongitude() != lng) {
+                                    lat = position.getLatitude();
+                                    lng = position.getLongitude();
+                                    responseObserver.onNext(
+                                            PositionRs.newBuilder()
+                                                    .setLatitude(lat)
+                                                    .setLongitude(lng)
+                                                    .build()
+                                    );
+                                }
+                            } else {
+                                responseObserver.onNext(
+                                        PositionRs.newBuilder()
+                                                .setLatitude(lat)
+                                                .setLongitude(lng)
+                                                .build()
+                                );
+                                responseObserver.onCompleted();
+                            }
+                        } else {
+                            listen = false;
+                        }
+                    }
+                } else {
+                    responseObserver.onNext(
+                            PositionRs.newBuilder()
+                                    .setLatitude(lat)
+                                    .setLongitude(lng)
+                                    .build()
+                    );
+                    responseObserver.onCompleted();
+                }
+
             }
         };
     }

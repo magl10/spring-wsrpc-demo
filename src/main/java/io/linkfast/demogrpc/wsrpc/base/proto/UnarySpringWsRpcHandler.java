@@ -8,7 +8,7 @@ import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public abstract class SpringWsRpcHandler extends BinaryWebSocketHandler {
+public abstract class UnarySpringWsRpcHandler extends BinaryWebSocketHandler {
     @Override
     protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
         final var byteBuffer = message.getPayload();

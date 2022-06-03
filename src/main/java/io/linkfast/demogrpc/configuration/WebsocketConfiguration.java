@@ -21,8 +21,16 @@ public class WebsocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
-                .addHandler(this.userService.createUser(), "/UserService/CreateUser")
-                .addHandler(this.userService.getAllUsers(), "/UserService")
+                .addHandler(this.userService.createUser(),
+                        "/UserService/CreateUser")
+                .addHandler(this.userService.deleteUser(),
+                        "/UserService/DeleteUser")
+                .addHandler(this.userService.getAllUsers(),
+                        "/UserService/GetAllUsers")
+                .addHandler(this.userService.updateUser(),
+                        "/UserService/UpdateUser")
+                .addHandler(this.userService.onReceivedLocationDriver(),
+                        "/UserService/OnReceivedLocationDriver")
                 .setAllowedOrigins("*");
     }
 }

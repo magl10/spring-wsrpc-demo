@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public abstract class UserServiceCreateUserWsRpcBase extends SpringWsRpcHandler {
+public abstract class UserServiceCreateUserWsRpcBaseUnary extends UnarySpringWsRpcHandler {
 
     ByteBuffer process(ByteBuffer requestByteBuffer) throws IOException {
         UserRq request;

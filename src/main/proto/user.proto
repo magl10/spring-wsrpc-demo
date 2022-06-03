@@ -11,6 +11,7 @@ service UserService {
     rpc UpdateUser (UserUpdateRq) returns (UserRs) {}
     rpc DeleteUser (DeleteUserRq) returns (DeleteUserRs) {}
     rpc GetAllUser (EmptyRq) returns (ListUsersResponse) {}
+    rpc OnReceivedLocationDriver(GetPositionDriverRq) returns (stream PositionRs);
 }
 
 message UserRq {
@@ -56,4 +57,13 @@ message EmptyRq {
 
 message ListUsersResponse {
     repeated UserRs users = 1;
+}
+
+message GetPositionDriverRq {
+    string idDriver = 1;
+}
+
+message PositionRs {
+    double latitude = 1;
+    double longitude = 2;
 }
