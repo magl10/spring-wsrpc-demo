@@ -1,5 +1,7 @@
 package io.linkfast.demogrpc.wsrpc.base.proto;
 
+import io.linkfast.demogrpc.Drivert.DrivertRs;
+import io.linkfast.demogrpc.Drivert.DrivertUpdateRq;
 import io.linkfast.demogrpc.user.UserRs;
 import io.linkfast.demogrpc.user.UserUpdateRq;
 
@@ -7,12 +9,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public abstract class UserServiceUpdateUserWsRpcBaseUnary extends UnarySpringWsRpcHandler {
+public abstract class DrivertServiceUpdateDrivertWsRpcBaseUnary extends  UnarySpringWsRpcHandler{
 
+    @Override
     ByteBuffer process(ByteBuffer requestByteBuffer) throws IOException {
-        UserUpdateRq request;
-        request = UserUpdateRq.parseFrom(requestByteBuffer);
-        final var response = updateUser(request);
+        DrivertUpdateRq request;
+        request = DrivertUpdateRq.parseFrom(requestByteBuffer);
+        final var response = updateDrivert(request);
 
         final var responseOutputStream = new ByteArrayOutputStream();
         response.writeTo(responseOutputStream);
@@ -21,6 +24,6 @@ public abstract class UserServiceUpdateUserWsRpcBaseUnary extends UnarySpringWsR
         return ByteBuffer.wrap(responseOutputStream.toByteArray());
     }
 
-    protected abstract UserRs updateUser(UserUpdateRq request);
+    protected abstract DrivertRs updateDrivert(DrivertUpdateRq request);
 
 }

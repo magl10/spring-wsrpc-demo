@@ -17,24 +17,33 @@ service DrivertService {
 
 message DrivertRq {
   string name = 1;
-  string dni = 2;
-  string status = 3;
+  string lastname= 2;
+  string dni = 3;
+  string placa = 4;
+  string marca = 5;
+  bool status = 6;
 
 }
 
 message DrivertRs {
   string id = 1;
   string name = 2;
-  string dni = 3;
-  string status = 4;
+  string lastname= 3;
+  string dni = 4;
+  string placa = 5;
+  string marca = 6;
+  bool status = 7;
 
 }
 
 message DrivertUpdateRq {
   string id = 1;
   string name = 2;
-  string dni = 3;
-  string status = 4;
+  string lastname= 3;
+  string dni = 4;
+  string placa = 5;
+  string marca = 6;
+  bool status = 7;
 
 }
 

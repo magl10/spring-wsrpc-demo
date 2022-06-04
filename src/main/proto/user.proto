@@ -12,6 +12,7 @@ service UserService {
     rpc DeleteUser (DeleteUserRq) returns (DeleteUserRs) {}
     rpc GetAllUser (EmptyRq) returns (ListUsersResponse) {}
     rpc OnReceivedLocationDriver(GetPositionDriverRq) returns (stream PositionRs);
+
 }
 
 message UserRq {
@@ -42,6 +43,8 @@ message UserUpdateRq {
     bool active = 6;
     string sex = 7;
 }
+
+
 
 message DeleteUserRq {
     string id = 1;

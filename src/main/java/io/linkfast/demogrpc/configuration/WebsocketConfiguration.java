@@ -43,6 +43,8 @@ public class WebsocketConfiguration implements WebSocketConfigurer {
                         "/DrivertService/createDrivert")
                 .addHandler(this.drivertService.getAllDrivert(),
                         "/DrivertService/getAllDrivert")
+                .addHandler(this.drivertService.updateDrivert(),
+                        "/DriverService/UpdateDrivert")
                 .setAllowedOrigins("*");
     }
 }

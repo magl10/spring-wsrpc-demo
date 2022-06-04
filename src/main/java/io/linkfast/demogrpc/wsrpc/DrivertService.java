@@ -1,14 +1,21 @@
 package io.linkfast.demogrpc.wsrpc;
 import io.linkfast.demogrpc.Drivert.DrivertRq;
 import io.linkfast.demogrpc.Drivert.DrivertRs;
+import io.linkfast.demogrpc.Drivert.DrivertUpdateRq;
 import io.linkfast.demogrpc.Drivert.ListDrivertsResponse;
 import io.linkfast.demogrpc.arangodb.entity.Drivert;
+import io.linkfast.demogrpc.arangodb.entity.User;
 import io.linkfast.demogrpc.arangodb.repository.DrivertRepository;
+import io.linkfast.demogrpc.user.UserRs;
+import io.linkfast.demogrpc.user.UserUpdateRq;
 import io.linkfast.demogrpc.wsrpc.base.proto.DrivertServiceCreateDrivertWsRpcBaseUnary;
 import io.linkfast.demogrpc.wsrpc.base.proto.DrivertServiceGetAllDrivertWsRpcBaseUnary;
+import io.linkfast.demogrpc.wsrpc.base.proto.DrivertServiceUpdateDrivertWsRpcBaseUnary;
+import io.linkfast.demogrpc.wsrpc.base.proto.UserServiceUpdateUserWsRpcBaseUnary;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -27,6 +34,8 @@ public class DrivertService {
                 Drivert drivert = Drivert.builder()
                         .name(request.getName())
                         .dni(request.getDni())
+                        .placa(request.getPlaca())
+                        .marca(request.getMarca())
                         .status(request.getStatus())
                         .build();
 
@@ -37,7 +46,11 @@ public class DrivertService {
                         .setId(drivert.getId())
                         .setName(drivert.getName())
                         .setDni(drivert.getDni())
+                        .setPlaca(drivert.getPlaca())
+                        .setMarca(drivert.getMarca())
                         .setStatus(drivert.getStatus())
+
+
                         .build();
             }
         };
@@ -56,7 +69,10 @@ public class DrivertService {
                                         .setId(drivert.getId())
                                         .setName(drivert.getName())
                                         .setDni(drivert.getDni())
+                                        .setPlaca(drivert.getPlaca())
+                                        .setMarca(drivert.getMarca())
                                         .setStatus(drivert.getStatus())
+
                                         .build()
                         ).collect(Collectors.toList())
                 );
@@ -64,6 +80,39 @@ public class DrivertService {
             }
         };
 
+    }
+
+    public DrivertServiceUpdateDrivertWsRpcBaseUnary updateDrivert() {
+        return new DrivertServiceUpdateDrivertWsRpcBaseUnary() {
+            @Override
+            protected DrivertRs updateDrivert(DrivertUpdateRq request) {
+                Optional<Drivert> drivertOptional = drivertRepository.findById(request.getId());
+                if (drivertOptional.isPresent()) {
+                    Drivert drivert = drivertOptional.get();
+
+                    drivert.setName(request.getName());
+                    drivert.setLastname(request.getLastname());
+                    drivert.setDni(request.getLastname());
+                    drivert.setPlaca(request.getPlaca());
+                    drivert.setMarca(request.getMarca());
+                    drivert.setStatus(request.getStatus());
+
+                    drivertRepository.save(drivert);
+
+                    return DrivertRs.newBuilder()
+                            .setId(drivert.getId())
+                            .setName(drivert.getName())
+                            .setLastname(drivert.getLastname())
+                            .setDni(drivert.getDni())
+                            .setPlaca(drivert.getPlaca())
+                            .setMarca(drivert.getMarca())
+                            .setStatus(drivert.getStatus())
+                            .build();
+                } else {
+                    throw new RuntimeException("User not found.");
+                }
+            }
+        };
     }
 
 }

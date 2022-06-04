@@ -12,6 +12,9 @@ public class Drivert {
     @Id
     private String id;
     private String name;
+    private String lastname;
     private String dni;
-    private String status;
+    private String placa;
+    private String marca;
+    private Boolean status;
 }
