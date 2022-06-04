@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.linkfast.demogrpc.Drivert";
+option java_outer_classname = "DrivertGrpcProto";
+
+package Drivert;
+
+service DrivertService {
+  rpc CreateDrivert (DrivertRq) returns (DrivertRs) {}
+  rpc UpdateDrivert (DrivertUpdateRq) returns (DrivertRs) {}
+  rpc DeleteDrivert (DeleteDrivertRq) returns (DeleteDrivertRs) {}
+  rpc GetAllDrivert (EmptyRq) returns (ListDrivertsResponse) {}
+
+
+}
+
+message DrivertRq {
+  string name = 1;
+  string dni = 2;
+  string status = 3;
+
+}
+
+message DrivertRs {
+  string id = 1;
+  string name = 2;
+  string dni = 3;
+  string status = 4;
+
+}
+
+message DrivertUpdateRq {
+  string id = 1;
+  string name = 2;
+  string dni = 3;
+  string status = 4;
+
+}
+
+message DeleteDrivertRq {
+  string id = 1;
+}
+
+message DeleteDrivertRs {
+  bool complete = 1;
+}
+
+message EmptyRq {
+
+}
+
+message ListDrivertsResponse {
+  repeated DrivertRs Driverts = 1;
+}
